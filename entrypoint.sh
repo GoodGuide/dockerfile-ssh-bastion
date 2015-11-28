@@ -9,7 +9,11 @@ create_key() {
 	local file="$1"
 	shift
 
-	if [[ ! -f $file ]]; then
+	printf '\n### %s\n' "$file"
+	if [[ -f $file ]]; then
+		echo 'Already exists'
+	else
+		echo 'Generate new'
 		ssh-keygen -q -f "$file" -N '' "$@"
 	fi
 	if [[ ! -f ${file}.pub ]]; then
@@ -20,7 +24,6 @@ create_key() {
 	fi
 
 	# Print fingerprints out to log:
-	printf '\n### %s\n' "$file"
 	ssh-keygen -E sha256 -l -f "${file}.pub"
 	ssh-keygen -v -E md5 -l -f "${file}.pub"
 }
