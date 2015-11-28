@@ -54,10 +54,10 @@ allow_github_user_via_ssh() {
 
 			local keylength=$(echo $fp | awk '{ print $1 }')
 			if [[ $keylength -ge 2048 ]]; then
-				printf '  %s [less than 2048 - IGNORED]\n' "$fp"
-			else
 				echo "$pubkey" >> "/etc/ssh/per-user/${ghuser}/authorized_keys"
 				printf '  %s\n' "$fp"
+			else
+				printf '  %s [less than 2048 - IGNORED]\n' "$fp"
 			fi
 		done
 	)
