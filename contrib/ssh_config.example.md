@@ -1,12 +1,15 @@
-Here's an example snippet to be used in your `~/.ssh/config`, which will automatically connect _via_ the bastion, when both the `USE_SSH_BASTION` variable is set in your shell as well as your connecting to a host on EC2. Your use case may be different, in which case I'd encourage you to customize the `Match` block to your needs [(see `Match` in `man ssh_config(5)`)][ssh_config_manpage].
+# Example Client Config
 
 For the sake of this example, let's assume this container is deployed as in the following `docker run` command, on a server resolvable under the domain name `bastion-1.domain.com`, and that your github username is `myGithubUser`
 
 ```shell
-docker run --name bastion -d -p 2222:22 quay.io/goodguide/ssh-bastion myGithubUser ...
+$ docker run --name bastion -d -p 2222:22 quay.io/goodguide/ssh-bastion myGithubUser ...
 ```
 
+Here's an example snippet to be used in your `~/.ssh/config`, which will automatically connect _via_ the bastion, when both the `USE_SSH_BASTION` variable is set in your shell as well as your connecting to a host on EC2. Your use case may be different, in which case I'd encourage you to customize the `Match` block to your needs [(see `Match` in `man ssh_config(5)`)][ssh_config_manpage].
+
 ```apache
+# ~/.ssh/config
 Host bastion
   # Set the real hostname; this can also be an IP address if you don't have a
   # DNS record for this server
