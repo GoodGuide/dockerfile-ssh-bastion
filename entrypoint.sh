@@ -1,7 +1,7 @@
 #!/bin/bash
 # vim: noexpandtab softtabstop=4 tabstop=4 shiftwidth=4:
 
-set -e -u -x
+set -e -u
 
 trap 'kill_sshd' INT
 trap 'kill_sshd' TERM
