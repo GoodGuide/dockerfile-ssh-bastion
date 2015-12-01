@@ -1,0 +1,18 @@
+[Unit]
+Description=bastion-host SSH service
+After=docker.service
+Requires=docker.service
+
+[Service]
+User=core
+TimeoutStartSec=900
+ExecStartPre=-/usr/bin/docker rm -f ssh-bastion
+ExecStartPre=/usr/bin/docker pull quay.io/goodguide/ssh-bastion:v3
+ExecStart=/usr/bin/docker run \
+  --name ssh-bastion \
+  -p 34523:22 \
+  quay.io/goodguide/ssh-bastion:v3 $(etcdctl get /ssh-bastion/usernames)
+ExecStop=/usr/bin/docker kill ssh-bastion
+
+[X-Fleet]
+Global=true
