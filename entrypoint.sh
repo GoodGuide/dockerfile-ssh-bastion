@@ -1,9 +1,20 @@
 #!/bin/bash
 # vim: noexpandtab softtabstop=4 tabstop=4 shiftwidth=4:
 
-set -e -u
+set -e -u -x
 
-trap 'exit 0' INT
+trap 'kill_sshd' INT
+trap 'kill_sshd' TERM
+
+# we'll set this later to the PID of the sshd process
+sshd=''
+
+kill_sshd() {
+	if [[ -n "$sshd" ]]; then
+		echo "Killing SSHD..."
+		kill -TERM "$sshd"
+	fi
+}
 
 create_key() {
 	local file="$1"
@@ -97,7 +108,9 @@ main() {
 	echo
 	echo '===== Starting SSHD ====='
 	# n.b. Not using exec here as sshd doesn't die on SIGINT which is annoying when using docker run (see the trap at the top of the file)
-	/usr/sbin/sshd -D -e
+	/usr/sbin/sshd -D -e &
+	sshd=$!
+	wait $sshd
 }
 
 main "$@"
