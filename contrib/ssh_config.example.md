@@ -11,20 +11,22 @@ Here's an example snippet to be used in your `~/.ssh/config`, which will automat
 ```apache
 # ~/.ssh/config
 Host bastion
-  # Set the real hostname; this can also be an IP address if you don't have a
-  # DNS record for this server
+  # See here for source of this config: https://github.com/GoodGuide/dockerfile-ssh-bastion/blob/master/contrib/ssh_config.example.md
+
+  # Set the real hostname; this can also be an IP address if you don't have a DNS record for this server
   HostName bastion-1.domain.com
 
+  StrictHostKeyChecking yes
   Port         2222
   User         myGithubUser
-  IdentityFile {{your github key}}
-  StrictHostKeyChecking yes
+
+  # if you have lots of SSH keys, it's useful to explicitly configure which one to use here:
+  #IdentityFile {{your github key}}
 
   # explicitly disable ProxyCommand to prevent infinite recursion
   ProxyCommand none
 
-  # these settings are not strictly necessary, but help make it explicit that
-  # you're never going to open a shell on this host
+  # these settings are not strictly necessary, but help make it explicit that you're never going to open a shell on this host
   ForwardAgent no
   ForwardX11 no
   RequestTTY no
@@ -34,8 +36,7 @@ Host bastion
   ControlPath    ~/.ssh/control_sockets/%h_%p_%r
   ControlPersist no
 
-# only use the bastion host for EC2 remotes and only when the USE_SSH_BASTION
-# variable is set in the shell invoking `ssh`
+# only use the bastion host for EC2 remotes and only when the USE_SSH_BASTION variable is set in the shell invoking `ssh`
 Match Exec "bash -c '[[ $USE_SSH_BASTION ]]'" Host *.amazonaws.com
   ProxyCommand ssh -W %h:%p bastion
 ```
