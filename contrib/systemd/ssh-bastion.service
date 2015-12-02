@@ -4,6 +4,8 @@ After=docker.service
 Requires=docker.service
 
 [Service]
+Restart=always
+RestartSec=30
 User=core
 TimeoutStartSec=900
 ExecStartPre=-/usr/bin/docker rm -f ssh-bastion
