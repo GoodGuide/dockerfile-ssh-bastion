@@ -12,7 +12,7 @@ ExecStartPre=-/usr/bin/docker rm -f ssh-bastion
 ExecStartPre=/usr/bin/docker pull quay.io/goodguide/ssh-bastion:v5
 ExecStart=/bin/bash -c '/usr/bin/docker run \
   --name ssh-bastion \
-  --volume /var/run/ssh-bastion/ssh-host-keys:/etc/ssh/ssh_host_keys \
+  --volume /var/lib/ssh-bastion/ssh-host-keys:/etc/ssh/ssh_host_keys \
   -p 34523:22 \
   quay.io/goodguide/ssh-bastion:v5 $(etcdctl get /ssh-bastion/usernames)'
 ExecStop=/usr/bin/docker kill ssh-bastion
